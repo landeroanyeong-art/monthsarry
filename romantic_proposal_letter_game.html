@@ -1,0 +1,1116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Little Surprise for Faith Grace ♥</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Outfit", sans-serif;
+        background: linear-gradient(
+          135deg,
+          #fff5f6 0%,
+          #ffe3e8 50%,
+          #fbd5dc 100%
+        );
+        touch-action: manipulation;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      .font-cursive {
+        font-family: "Caveat", cursive;
+      }
+
+      .font-serif-title {
+        font-family: "Playfair Display", serif;
+      }
+
+      /* Floating background heart canvas style */
+      #particleCanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* Envelope CSS Styling */
+      .envelope-wrapper {
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+
+      .envelope-wrapper:hover {
+        transform: scale(1.04);
+      }
+
+      .envelope-body {
+        width: 230px;
+        height: 145px;
+        background-color: #ffb7c5;
+        border-radius: 14px;
+        position: relative;
+        box-shadow:
+          0 15px 35px rgba(225, 105, 135, 0.25),
+          0 5px 15px rgba(0, 0, 0, 0.05);
+        border: 2px solid #ff9ebb;
+        overflow: hidden;
+      }
+
+      .envelope-flap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-left: 115px solid transparent;
+        border-right: 115px solid transparent;
+        border-top: 90px solid #ff9ebb;
+        transform-origin: top;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 4;
+      }
+
+      .envelope-flap-inner {
+        position: absolute;
+        top: -90px;
+        left: -111px;
+        width: 0;
+        height: 0;
+        border-left: 111px solid transparent;
+        border-right: 111px solid transparent;
+        border-top: 86px solid #ffced8;
+      }
+
+      .envelope-pocket {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-left: 115px solid #ffa3b8;
+        border-right: 115px solid #ffa3b8;
+        border-bottom: 78px solid #ff8da9;
+        z-index: 3;
+      }
+
+      .envelope-heart-seal {
+        position: absolute;
+        top: 72px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 5;
+        transition:
+          transform 0.4s ease,
+          opacity 0.4s ease;
+      }
+
+      .envelope-wrapper.open .envelope-flap {
+        transform: rotateX(180deg);
+        z-index: 1;
+      }
+
+      .envelope-wrapper.open .envelope-heart-seal {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0);
+      }
+
+      /* Pulse glow animation for seal */
+      @keyframes pulse-glow {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          filter: drop-shadow(0 0 6px rgba(236, 72, 153, 0.6));
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.18);
+          filter: drop-shadow(0 0 14px rgba(236, 72, 153, 0.9));
+        }
+      }
+
+      .seal-pulse {
+        animation: pulse-glow 2s infinite ease-in-out;
+      }
+
+      /* Glassmorphism modal */
+      .glass-card {
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 182, 193, 0.6);
+        box-shadow: 0 25px 50px -12px rgba(225, 29, 72, 0.25);
+      }
+
+      /* Hide scrollbars for smooth aesthetic horizontal scroll */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* Polaroid card effect */
+      .polaroid-card {
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      .polaroid-card:hover {
+        transform: translateY(-6px) rotate(1deg);
+        box-shadow: 0 12px 24px -6px rgba(225, 29, 72, 0.2);
+      }
+    </style>
+  </head>
+  <body
+    class="w-screen h-screen overflow-hidden flex flex-col items-center justify-between relative select-none"
+  >
+    <!-- Canvas for Floating Particle Background -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- 
+      AUDIO PLAYER FOR "BLUE" BY YUNG KAI 
+      Save your downloaded mp3 audio file as 'blue.mp3' in the same GitHub directory as index.html
+    -->
+    <audio id="bgMusic" loop preload="auto">
+      <source src="blue.mp3" type="audio/mpeg" />
+      <source src="blue.ogg" type="audio/ogg" />
+      Your browser does not support the audio element.
+    </audio>
+
+    <!-- Top Header -->
+    <header class="z-10 mt-6 text-center px-4">
+      <h1
+        class="text-3xl md:text-4xl font-serif-title font-bold text-rose-600 tracking-wide drop-shadow-sm"
+      >
+        For My Dearest Faith Grace ♥
+      </h1>
+      <p
+        class="text-xs md:text-sm text-rose-400 mt-1 font-medium tracking-wider"
+      >
+        A SPECIAL LITTLE SURPRISE
+      </p>
+    </header>
+
+    <!-- Target Area: Floating Envelope -->
+    <main
+      class="z-10 flex-1 flex flex-col items-center justify-center relative w-full max-w-xl"
+    >
+      <div id="targetContainer" class="relative flex flex-col items-center">
+        <!-- Envelope Element -->
+        <div id="envelope" class="envelope-wrapper mb-3">
+          <div class="envelope-body">
+            <div class="envelope-flap">
+              <div class="envelope-flap-inner"></div>
+            </div>
+            <div class="envelope-pocket"></div>
+            <div id="seal" class="envelope-heart-seal seal-pulse text-3xl">
+              💖
+            </div>
+          </div>
+        </div>
+
+        <span
+          id="targetLabel"
+          class="text-rose-600 font-cursive text-2xl font-bold tracking-wide flex items-center gap-1 bg-white/70 px-4 py-1 rounded-full border border-pink-200 shadow-sm backdrop-blur-sm"
+        >
+          ♥ Shoot the Heart to Open ♥
+        </span>
+      </div>
+    </main>
+
+    <!-- Interactive Bow & Arrow Control Area -->
+    <footer
+      class="z-10 mb-6 w-full max-w-md px-4 flex flex-col items-center relative"
+    >
+      <div class="relative w-full h-44 flex items-center justify-center">
+        <canvas
+          id="bowCanvas"
+          class="w-full h-full cursor-grab active:cursor-grabbing"
+        ></canvas>
+      </div>
+
+      <p
+        id="instructionText"
+        class="text-xs md:text-sm text-rose-500 font-medium text-center mt-1 bg-white/70 px-4 py-1.5 rounded-full border border-rose-200 shadow-sm"
+      >
+        🏹 Drag arrow back, aim & release to shoot! ♥
+      </p>
+    </footer>
+
+    <!-- POPUP MODAL / LOVE LETTER CARD -->
+    <div
+      id="letterModal"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-rose-950/30 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-700"
+    >
+      <div
+        id="modalContent"
+        class="glass-card w-full max-w-xl rounded-3xl p-5 md:p-8 text-center relative transform scale-90 transition-all duration-500 max-h-[90vh] overflow-y-auto no-scrollbar"
+      >
+        <!-- Close Button -->
+        <button
+          id="closeModalBtn"
+          class="absolute top-4 right-4 w-9 h-9 bg-rose-100 hover:bg-rose-200 text-rose-600 rounded-full flex items-center justify-center transition-colors font-bold text-lg z-10"
+        >
+          ✕
+        </button>
+
+        <!-- Audio Control Button in Letter -->
+        <button
+          id="musicToggleBtn"
+          class="absolute top-4 left-4 px-3 py-1 bg-rose-100 hover:bg-rose-200 text-rose-600 rounded-full flex items-center gap-1.5 text-xs font-semibold transition-colors shadow-sm z-10"
+        >
+          <span id="musicIcon">🎵</span>
+          <span id="musicStatusText">Playing Blue</span>
+        </button>
+
+        <!-- Heart Icon Header -->
+        <div
+          class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-tr from-rose-400 to-pink-300 rounded-full shadow-lg shadow-rose-300/50 mb-3 text-3xl text-white mt-4 md:mt-0"
+        >
+          💌
+        </div>
+
+        <h2 class="text-3xl font-serif-title font-bold text-rose-700 mb-1">
+          Happy Monthsary!
+        </h2>
+        <p class="text-rose-500 font-semibold text-sm mb-4">
+          To my beautiful Faith Grace ♥
+        </p>
+
+        <!-- Dynamic Counter Display Box -->
+        <div
+          class="bg-gradient-to-r from-pink-50 via-rose-50 to-pink-50 border border-pink-200 rounded-2xl p-4 shadow-inner mb-5"
+        >
+          <p
+            class="text-xs text-rose-400 font-semibold uppercase tracking-widest mb-2"
+          >
+            We have been together for
+          </p>
+          <div
+            id="timeCounter"
+            class="text-rose-700 font-bold text-base md:text-lg leading-relaxed font-sans"
+          >
+            Calculating time...
+          </div>
+        </div>
+
+        <!-- Personalized Love Note -->
+        <div
+          class="text-slate-600 text-sm md:text-base leading-relaxed space-y-3 font-cursive text-xl text-left bg-white/70 p-4 rounded-2xl border border-rose-100 shadow-sm mb-6"
+        >
+          <p>My Dearest Faith Grace,</p>
+          <p>
+            Every single second with you has been an absolute dream. Thank you
+            for filling my life with endless warmth, joy, and unconditional
+            love.
+          </p>
+          <p>
+            <i>"I'm falling for you, like blue..."</i> 🎵 Here's to endless more
+            memories, laughter, and milestones together. I love you more and
+            more each day! 💕
+          </p>
+        </div>
+
+        <!-- MEMORIES PHOTO GALLERY SECTION -->
+        <div class="mt-4 text-left border-t border-rose-100 pt-5">
+          <div class="flex items-center justify-between mb-3 px-1">
+            <div>
+              <h3
+                class="text-lg font-serif-title font-bold text-rose-700 flex items-center gap-2"
+              >
+                <span>📷</span> Our Favorite Moments
+              </h3>
+              <p class="text-xs text-rose-400">
+                Scroll sideways to view our memories together ♥
+              </p>
+            </div>
+            <span
+              class="text-xs bg-rose-100 text-rose-600 px-2.5 py-1 rounded-full font-semibold"
+              >Swipe 👉</span
+            >
+          </div>
+
+          <!-- Horizontal Scrollable Polaroid Carousel -->
+          <div
+            class="flex gap-4 overflow-x-auto pb-4 pt-2 no-scrollbar scroll-smooth cursor-grab active:cursor-grabbing"
+          >
+            <!-- Photo 1 -->
+            <div
+              class="polaroid-card flex-shrink-0 w-44 bg-white p-2.5 pb-3 rounded-2xl shadow-md border border-rose-100 cursor-pointer"
+              onclick="
+                openLightbox(
+                  'photo1.jpg',
+                  'Birthday Girl ❤️',
+                  'I am so happy to celebrate this special day with you.',
+                )
+              "
+            >
+              <div
+                class="w-full h-44 rounded-xl overflow-hidden bg-rose-50 relative"
+              >
+                <img
+                  src="photo1.jpg"
+                  alt="Your Birthday"
+                  class="w-full h-full object-cover"
+                  onerror="
+                    this.src =
+                      'https://placehold.co/400x400/ffe3e8/e11d48?text=Your+Birthday+❤️'
+                  "
+                />
+              </div>
+              <div class="mt-2 text-center">
+                <p
+                  class="font-cursive text-lg text-rose-600 font-bold leading-tight"
+                >
+                  Your Birthday ❤️
+                </p>
+                <p class="text-[10px] text-slate-400 mt-0.5">
+                  I am so embarassed here this time because your whole family is
+                  here.
+                </p>
+              </div>
+            </div>
+
+            <!-- Photo 2 -->
+            <div
+              class="polaroid-card flex-shrink-0 w-44 bg-white p-2.5 pb-3 rounded-2xl shadow-md border border-rose-100 cursor-pointer"
+              onclick="
+                openLightbox(
+                  'photo2.jpg',
+                  'At Campsite ✈️',
+                  'Serving God hand in hand.',
+                )
+              "
+            >
+              <div
+                class="w-full h-44 rounded-xl overflow-hidden bg-rose-50 relative"
+              >
+                <img
+                  src="photo2.jpg"
+                  alt="Our Trip"
+                  class="w-full h-full object-cover"
+                  onerror="
+                    this.src =
+                      'https://placehold.co/400x400/fbd5dc/e11d48?text=At+Campsite+✈️'
+                  "
+                />
+              </div>
+              <div class="mt-2 text-center">
+                <p
+                  class="font-cursive text-lg text-rose-600 font-bold leading-tight"
+                >
+                  At Campsite ✈️
+                </p>
+                <p class="text-[10px] text-slate-400 mt-0.5">
+                  One of the best memories with you
+                </p>
+              </div>
+            </div>
+
+            <!-- Photo 3 -->
+            <div
+              class="polaroid-card flex-shrink-0 w-44 bg-white p-2.5 pb-3 rounded-2xl shadow-md border border-rose-100 cursor-pointer"
+              onclick="
+                openLightbox(
+                  'photo3.jpg',
+                  'Silly Smiles & Laughs 😊',
+                  'Forever my favorite smile in the world.',
+                )
+              "
+            >
+              <div
+                class="w-full h-44 rounded-xl overflow-hidden bg-rose-50 relative"
+              >
+                <img
+                  src="photo3.jpg"
+                  alt="Cutie Smile"
+                  class="w-full h-full object-cover"
+                  onerror="
+                    this.src =
+                      'https://placehold.co/400x400/ffb7c5/e11d48?text=Cutie+Smile+😊'
+                  "
+                />
+              </div>
+              <div class="mt-2 text-center">
+                <p
+                  class="font-cursive text-lg text-rose-600 font-bold leading-tight"
+                >
+                  Cutie Smile 😊
+                </p>
+                <p class="text-[10px] text-slate-400 mt-0.5">
+                  Your smile lights my world
+                </p>
+              </div>
+            </div>
+
+            <!-- Photo 4 -->
+            <div
+              class="polaroid-card flex-shrink-0 w-44 bg-white p-2.5 pb-3 rounded-2xl shadow-md border border-rose-100 cursor-pointer"
+              onclick="
+                openLightbox(
+                  'photo4.jpg',
+                  'Foods After Graduation 🌅',
+                  'Not enough money? No problem!.',
+                )
+              "
+            >
+              <div
+                class="w-full h-44 rounded-xl overflow-hidden bg-rose-50 relative"
+              >
+                <img
+                  src="photo4.jpg"
+                  alt="Graduation"
+                  class="w-full h-full object-cover"
+                  onerror="
+                    this.src =
+                      'https://placehold.co/400x400/ffd1dc/e11d48?text=Foods+After+Graduation+🌅'
+                  "
+                />
+              </div>
+              <div class="mt-2 text-center">
+                <p
+                  class="font-cursive text-lg text-rose-600 font-bold leading-tight"
+                >
+                  Foods after graduation 🌅
+                </p>
+                <p class="text-[10px] text-slate-400 mt-0.5">
+                  Foodie for life with you
+                </p>
+              </div>
+            </div>
+
+            <!-- Photo 5 -->
+            <div
+              class="polaroid-card flex-shrink-0 w-44 bg-white p-2.5 pb-3 rounded-2xl shadow-md border border-rose-100 cursor-pointer"
+              onclick="
+                openLightbox(
+                  'photo5.jpg',
+                  'To Forever & Always 💖',
+                  'I promise to love you more each day.',
+                )
+              "
+            >
+              <div
+                class="w-full h-44 rounded-xl overflow-hidden bg-rose-50 relative"
+              >
+                <img
+                  src="photo5.jpg"
+                  alt="To Forever"
+                  class="w-full h-full object-cover"
+                  onerror="
+                    this.src =
+                      'https://placehold.co/400x400/ffcad4/e11d48?text=Forever+%26+Always+💖'
+                  "
+                />
+              </div>
+              <div class="mt-2 text-center">
+                <p
+                  class="font-cursive text-lg text-rose-600 font-bold leading-tight"
+                >
+                  To Forever 💖
+                </p>
+                <p class="text-[10px] text-slate-400 mt-0.5">
+                  Here's to our future
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Action Button -->
+        <button
+          id="replayBtn"
+          class="mt-6 w-full py-3 bg-gradient-to-r from-rose-400 to-pink-500 hover:from-rose-500 hover:to-pink-600 text-white font-semibold rounded-2xl shadow-md shadow-pink-300/50 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+        >
+          Shoot Again 🏹
+        </button>
+      </div>
+    </div>
+
+    <!-- LIGHTBOX / PHOTO PREVIEW MODAL -->
+    <div
+      id="lightboxModal"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300"
+    >
+      <div
+        class="bg-white rounded-3xl p-4 max-w-sm w-full relative shadow-2xl transform scale-95 transition-all duration-300"
+        id="lightboxContent"
+      >
+        <button
+          onclick="closeLightbox()"
+          class="absolute -top-3 -right-3 w-9 h-9 bg-rose-500 text-white rounded-full flex items-center justify-center font-bold shadow-lg hover:bg-rose-600 transition-colors z-20"
+        >
+          ✕
+        </button>
+        <div
+          class="w-full h-72 rounded-2xl overflow-hidden bg-rose-50 relative"
+        >
+          <img
+            id="lightboxImg"
+            src=""
+            alt="Photo Memory"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="mt-3 text-center">
+          <h4
+            id="lightboxTitle"
+            class="font-cursive text-2xl font-bold text-rose-600"
+          ></h4>
+          <p id="lightboxDesc" class="text-xs text-slate-500 mt-1"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+      /*************************************************************
+       * 1. CONFIGURATION & START DATE SETTING
+       * Adjust your anniversary start date & time below
+       *************************************************************/
+      const START_DATE = new Date("2024-05-20T00:00:00");
+
+      /*************************************************************
+       * 2. AUDIO PLAYBACK CONTROLLER ('blue.mp3')
+       *************************************************************/
+      const bgMusic = document.getElementById("bgMusic");
+      const musicToggleBtn = document.getElementById("musicToggleBtn");
+      const musicIcon = document.getElementById("musicIcon");
+      const musicStatusText = document.getElementById("musicStatusText");
+      let isPlaying = false;
+
+      function playMusic() {
+        bgMusic
+          .play()
+          .then(() => {
+            isPlaying = true;
+            musicIcon.innerText = "🎵";
+            musicStatusText.innerText = "Pause Blue";
+          })
+          .catch((err) => {
+            console.log("Audio play deferred or file not found:", err);
+          });
+      }
+
+      function toggleMusic() {
+        if (isPlaying) {
+          bgMusic.pause();
+          isPlaying = false;
+          musicIcon.innerText = "🔇";
+          musicStatusText.innerText = "Play Blue";
+        } else {
+          playMusic();
+        }
+      }
+
+      musicToggleBtn.addEventListener("click", toggleMusic);
+
+      /*************************************************************
+       * 3. REAL-TIME RELATIONSHIP DURATION CALCULATOR
+       *************************************************************/
+      function updateRelationshipCounter() {
+        const now = new Date();
+
+        let years = now.getFullYear() - START_DATE.getFullYear();
+        let months = now.getMonth() - START_DATE.getMonth();
+        let days = now.getDate() - START_DATE.getDate();
+        let hours = now.getHours() - START_DATE.getHours();
+        let minutes = now.getMinutes() - START_DATE.getMinutes();
+        let seconds = now.getSeconds() - START_DATE.getSeconds();
+
+        if (seconds < 0) {
+          seconds += 60;
+          minutes--;
+        }
+        if (minutes < 0) {
+          minutes += 60;
+          hours--;
+        }
+        if (hours < 0) {
+          hours += 24;
+          days--;
+        }
+        if (days < 0) {
+          const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+          days += prevMonth.getDate();
+          months--;
+        }
+        if (months < 0) {
+          months += 12;
+          years--;
+        }
+
+        const parts = [];
+        if (years > 0)
+          parts.push(
+            `<span class="text-xl md:text-2xl text-rose-600">${years}</span> year${years > 1 ? "s" : ""}`,
+          );
+        if (months > 0 || years > 0)
+          parts.push(
+            `<span class="text-xl md:text-2xl text-rose-600">${months}</span> month${months > 1 ? "s" : ""}`,
+          );
+        parts.push(
+          `<span class="text-xl md:text-2xl text-rose-600">${days}</span> day${days !== 1 ? "s" : ""}`,
+        );
+        parts.push(
+          `<span class="text-xl md:text-2xl text-rose-600">${hours}</span> hour${hours !== 1 ? "s" : ""}`,
+        );
+        parts.push(
+          `<span class="text-xl md:text-2xl text-rose-600">${minutes}</span> minute${minutes !== 1 ? "s" : ""}`,
+        );
+        parts.push(
+          `<span class="text-xl md:text-2xl text-rose-600">${seconds}</span> second${seconds !== 1 ? "s" : ""}`,
+        );
+
+        const counterEl = document.getElementById("timeCounter");
+        if (counterEl) {
+          counterEl.innerHTML = parts.join(", ");
+        }
+      }
+
+      setInterval(updateRelationshipCounter, 1000);
+      updateRelationshipCounter();
+
+      /*************************************************************
+       * 4. BACKGROUND FLOATING HEARTS ANIMATION
+       *************************************************************/
+      const bgCanvas = document.getElementById("particleCanvas");
+      const bgCtx = bgCanvas.getContext("2d");
+      let particles = [];
+
+      function resizeBgCanvas() {
+        bgCanvas.width = window.innerWidth;
+        bgCanvas.height = window.innerHeight;
+      }
+      window.addEventListener("resize", resizeBgCanvas);
+      resizeBgCanvas();
+
+      class HeartParticle {
+        constructor() {
+          this.reset();
+        }
+
+        reset() {
+          this.x = Math.random() * bgCanvas.width;
+          this.y = bgCanvas.height + 20;
+          this.size = Math.random() * 14 + 8;
+          this.speedY = Math.random() * 1.5 + 0.5;
+          this.speedX = Math.sin(Math.random() * Math.PI) * 0.8;
+          this.opacity = Math.random() * 0.5 + 0.3;
+          this.rotation = Math.random() * 360;
+          this.rotSpeed = (Math.random() - 0.5) * 1.5;
+          this.color = `hsla(${Math.random() * 20 + 340}, 100%, 75%, ${this.opacity})`;
+        }
+
+        update() {
+          this.y -= this.speedY;
+          this.x += Math.sin(this.y * 0.02) * 0.6;
+          this.rotation += this.rotSpeed;
+
+          if (this.y < -30) {
+            this.reset();
+          }
+        }
+
+        draw() {
+          bgCtx.save();
+          bgCtx.translate(this.x, this.y);
+          bgCtx.rotate((this.rotation * Math.PI) / 180);
+          bgCtx.fillStyle = this.color;
+
+          const s = this.size;
+          bgCtx.beginPath();
+          bgCtx.moveTo(0, 0);
+          bgCtx.bezierCurveTo(-s / 2, -s / 2, -s, s / 3, 0, s);
+          bgCtx.bezierCurveTo(s, s / 3, s / 2, -s / 2, 0, 0);
+          bgCtx.fill();
+          bgCtx.restore();
+        }
+      }
+
+      for (let i = 0; i < 25; i++) {
+        const p = new HeartParticle();
+        p.y = Math.random() * bgCanvas.height;
+        particles.push(p);
+      }
+
+      function animateBackground() {
+        bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+        particles.forEach((p) => {
+          p.update();
+          p.draw();
+        });
+        requestAnimationFrame(animateBackground);
+      }
+      animateBackground();
+
+      /*************************************************************
+       * 5. CUPID'S BOW & ARROW MECHANICS
+       *************************************************************/
+      const bowCanvas = document.getElementById("bowCanvas");
+      const bowCtx = bowCanvas.getContext("2d");
+
+      let isDragging = false;
+      let bowCenter = { x: 0, y: 0 };
+      let arrowPos = { x: 0, y: 0 };
+      let dragPos = { x: 0, y: 0 };
+      let isFlying = false;
+      let flyingArrow = { x: 0, y: 0, vx: 0, vy: 0, angle: 0 };
+
+      function resizeBowCanvas() {
+        const rect = bowCanvas.parentElement.getBoundingClientRect();
+        bowCanvas.width = rect.width;
+        bowCanvas.height = rect.height;
+        bowCenter = { x: bowCanvas.width / 2, y: bowCanvas.height * 0.65 };
+        if (!isDragging && !isFlying) {
+          arrowPos = { ...bowCenter };
+          dragPos = { ...bowCenter };
+        }
+      }
+      window.addEventListener("resize", resizeBowCanvas);
+      resizeBowCanvas();
+
+      function getEventPos(e) {
+        const rect = bowCanvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+          x: clientX - rect.left,
+          y: clientY - rect.top,
+        };
+      }
+
+      function startDrag(e) {
+        if (isFlying) return;
+        const pos = getEventPos(e);
+        const dist = Math.hypot(pos.x - bowCenter.x, pos.y - bowCenter.y);
+        if (dist < 80) {
+          isDragging = true;
+          dragPos = pos;
+        }
+      }
+
+      function moveDrag(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        const pos = getEventPos(e);
+
+        const dx = pos.x - bowCenter.x;
+        const dy = pos.y - bowCenter.y;
+        const dist = Math.hypot(dx, dy);
+        const maxDrag = 70;
+
+        if (dist > maxDrag) {
+          const angle = Math.atan2(dy, dx);
+          dragPos = {
+            x: bowCenter.x + Math.cos(angle) * maxDrag,
+            y: bowCenter.y + Math.sin(angle) * maxDrag,
+          };
+        } else {
+          dragPos = pos;
+        }
+      }
+
+      function endDrag() {
+        if (!isDragging) return;
+        isDragging = false;
+
+        const dx = bowCenter.x - dragPos.x;
+        const dy = bowCenter.y - dragPos.y;
+        const pullDist = Math.hypot(dx, dy);
+
+        if (pullDist > 15) {
+          isFlying = true;
+          const speed = Math.min(pullDist * 0.45, 25);
+          const angle = Math.atan2(dy, dx);
+
+          const canvasRect = bowCanvas.getBoundingClientRect();
+          flyingArrow = {
+            x: canvasRect.left + bowCenter.x,
+            y: canvasRect.top + bowCenter.y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            angle: angle,
+          };
+        } else {
+          dragPos = { ...bowCenter };
+        }
+      }
+
+      bowCanvas.addEventListener("mousedown", startDrag);
+      window.addEventListener("mousemove", moveDrag);
+      window.addEventListener("mouseup", endDrag);
+
+      bowCanvas.addEventListener("touchstart", startDrag, { passive: false });
+      window.addEventListener("touchmove", moveDrag, { passive: false });
+      window.addEventListener("touchend", endDrag);
+
+      function drawBow() {
+        bowCtx.clearRect(0, 0, bowCanvas.width, bowCanvas.height);
+
+        const dx = bowCenter.x - dragPos.x;
+        const dy = bowCenter.y - dragPos.y;
+        const angle = Math.atan2(dy, dx);
+
+        bowCtx.save();
+        bowCtx.translate(bowCenter.x, bowCenter.y);
+        bowCtx.rotate(angle - Math.PI / 2);
+
+        const bowWidth = 90;
+        const bowHeight = 45;
+
+        bowCtx.beginPath();
+        bowCtx.strokeStyle = "#d97706";
+        bowCtx.lineWidth = 6;
+        bowCtx.lineCap = "round";
+        bowCtx.quadraticCurveTo(0, -bowHeight, bowWidth / 2, 0);
+        bowCtx.moveTo(0, 0);
+        bowCtx.quadraticCurveTo(0, -bowHeight, -bowWidth / 2, 0);
+        bowCtx.stroke();
+
+        const pullOffset = isDragging ? Math.hypot(dx, dy) : 0;
+        bowCtx.beginPath();
+        bowCtx.strokeStyle = "#f472b6";
+        bowCtx.lineWidth = 2;
+        bowCtx.moveTo(-bowWidth / 2, 0);
+        bowCtx.lineTo(0, pullOffset);
+        bowCtx.lineTo(bowWidth / 2, 0);
+        bowCtx.stroke();
+
+        if (!isFlying) {
+          bowCtx.save();
+          bowCtx.translate(0, pullOffset);
+
+          bowCtx.beginPath();
+          bowCtx.strokeStyle = "#e11d48";
+          bowCtx.lineWidth = 3.5;
+          bowCtx.moveTo(0, 0);
+          bowCtx.lineTo(0, -60);
+          bowCtx.stroke();
+
+          bowCtx.fillStyle = "#ec4899";
+          bowCtx.beginPath();
+          const hs = 8;
+          bowCtx.translate(0, -65);
+          bowCtx.moveTo(0, 0);
+          bowCtx.bezierCurveTo(-hs, -hs, -hs * 1.5, hs / 2, 0, hs * 1.2);
+          bowCtx.bezierCurveTo(hs * 1.5, hs / 2, hs, -hs, 0, 0);
+          bowCtx.fill();
+          bowCtx.restore();
+        }
+
+        bowCtx.restore();
+
+        requestAnimationFrame(drawBow);
+      }
+      drawBow();
+
+      /*************************************************************
+       * 6. FLYING ARROW & TARGET COLLISION DETECTOR
+       *************************************************************/
+      let flyingArrowEl = null;
+
+      function animateFlyingArrow() {
+        if (!isFlying) return;
+
+        flyingArrow.x += flyingArrow.vx;
+        flyingArrow.y += flyingArrow.vy;
+
+        if (!flyingArrowEl) {
+          flyingArrowEl = document.createElement("div");
+          flyingArrowEl.style.position = "fixed";
+          flyingArrowEl.style.pointerEvents = "none";
+          flyingArrowEl.style.zIndex = "40";
+          flyingArrowEl.innerHTML = `
+                    <div style="transform: rotate(${flyingArrow.angle + Math.PI / 2}rad); transform-origin: center;">
+                        <svg width="24" height="60" viewBox="0 0 24 60" fill="none">
+                            <line x1="12" y1="12" x2="12" y2="58" stroke="#e11d48" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M12 2 C6 -4 0 4 12 14 C24 4 18 -4 12 2 Z" fill="#ec4899"/>
+                        </svg>
+                    </div>
+                `;
+          document.body.appendChild(flyingArrowEl);
+        }
+
+        flyingArrowEl.style.left = `${flyingArrow.x - 12}px`;
+        flyingArrowEl.style.top = `${flyingArrow.y - 30}px`;
+
+        const targetEl = document.getElementById("targetContainer");
+        const rect = targetEl.getBoundingClientRect();
+
+        if (
+          flyingArrow.x >= rect.left &&
+          flyingArrow.x <= rect.right &&
+          flyingArrow.y >= rect.top &&
+          flyingArrow.y <= rect.bottom
+        ) {
+          isFlying = false;
+          if (flyingArrowEl) {
+            flyingArrowEl.remove();
+            flyingArrowEl = null;
+          }
+          triggerEnvelopeOpen();
+          return;
+        }
+
+        if (
+          flyingArrow.y < -50 ||
+          flyingArrow.x < -50 ||
+          flyingArrow.x > window.innerWidth + 50
+        ) {
+          isFlying = false;
+          if (flyingArrowEl) {
+            flyingArrowEl.remove();
+            flyingArrowEl = null;
+          }
+          dragPos = { ...bowCenter };
+        }
+
+        if (isFlying) {
+          requestAnimationFrame(animateFlyingArrow);
+        }
+      }
+
+      window.addEventListener("mouseup", () => {
+        if (isFlying) requestAnimationFrame(animateFlyingArrow);
+      });
+      window.addEventListener("touchend", () => {
+        if (isFlying) requestAnimationFrame(animateFlyingArrow);
+      });
+
+      /*************************************************************
+       * 7. OPEN ENVELOPE, PLAY MUSIC & REVEAL MODAL WITH CONFETTI
+       *************************************************************/
+      function triggerEnvelopeOpen() {
+        const envelope = document.getElementById("envelope");
+        const targetLabel = document.getElementById("targetLabel");
+        const modal = document.getElementById("letterModal");
+        const modalContent = document.getElementById("modalContent");
+
+        envelope.classList.add("open");
+        targetLabel.innerText = "♥ Opened with Love! ♥";
+
+        // Plays blue.mp3 on successful target hit
+        playMusic();
+
+        createHeartBurst(window.innerWidth / 2, window.innerHeight * 0.4);
+
+        setTimeout(() => {
+          modal.classList.remove("opacity-0", "pointer-events-none");
+          modalContent.classList.remove("scale-90");
+          modalContent.classList.add("scale-100");
+        }, 700);
+      }
+
+      function createHeartBurst(originX, originY) {
+        const burstCount = 35;
+        for (let i = 0; i < burstCount; i++) {
+          const el = document.createElement("div");
+          el.innerText = ["💖", "💕", "🌸", "✨", "❤️", "🎉", "🌹"][
+            Math.floor(Math.random() * 7)
+          ];
+          el.style.position = "fixed";
+          el.style.left = `${originX}px`;
+          el.style.top = `${originY}px`;
+          el.style.fontSize = `${Math.random() * 18 + 18}px`;
+          el.style.pointerEvents = "none";
+          el.style.zIndex = "60";
+          el.style.transition = "all 1.4s cubic-bezier(0.1, 0.8, 0.3, 1)";
+          document.body.appendChild(el);
+
+          const angle = Math.random() * Math.PI * 2;
+          const dist = Math.random() * 180 + 70;
+          const tx = Math.cos(angle) * dist;
+          const ty = Math.sin(angle) * dist - 60;
+
+          requestAnimationFrame(() => {
+            el.style.transform = `translate(${tx}px, ${ty}px) scale(${Math.random() * 0.8 + 1}) rotate(${Math.random() * 90 - 45}deg)`;
+            el.style.opacity = "0";
+          });
+
+          setTimeout(() => el.remove(), 1500);
+        }
+      }
+
+      /*************************************************************
+       * 8. LIGHTBOX / PHOTO PREVIEW CONTROLLER
+       *************************************************************/
+      function openLightbox(imgSrc, title, desc) {
+        const lightbox = document.getElementById("lightboxModal");
+        const lightboxContent = document.getElementById("lightboxContent");
+        const lightboxImg = document.getElementById("lightboxImg");
+        const lightboxTitle = document.getElementById("lightboxTitle");
+        const lightboxDesc = document.getElementById("lightboxDesc");
+
+        lightboxImg.src = imgSrc;
+        lightboxImg.onerror = function () {
+          this.src = `https://placehold.co/400x400/ffe3e8/e11d48?text=${encodeURIComponent(title)}`;
+        };
+        lightboxTitle.innerText = title;
+        lightboxDesc.innerText = desc;
+
+        lightbox.classList.remove("opacity-0", "pointer-events-none");
+        lightboxContent.classList.remove("scale-95");
+        lightboxContent.classList.add("scale-100");
+      }
+
+      function closeLightbox() {
+        const lightbox = document.getElementById("lightboxModal");
+        const lightboxContent = document.getElementById("lightboxContent");
+
+        lightbox.classList.add("opacity-0", "pointer-events-none");
+        lightboxContent.classList.remove("scale-100");
+        lightboxContent.classList.add("scale-95");
+      }
+
+      document
+        .getElementById("lightboxModal")
+        .addEventListener("click", (e) => {
+          if (e.target.id === "lightboxModal") {
+            closeLightbox();
+          }
+        });
+
+      document.getElementById("envelope").addEventListener("click", () => {
+        triggerEnvelopeOpen();
+      });
+
+      function closeModal() {
+        const modal = document.getElementById("letterModal");
+        const modalContent = document.getElementById("modalContent");
+        const envelope = document.getElementById("envelope");
+        const targetLabel = document.getElementById("targetLabel");
+
+        modal.classList.add("opacity-0", "pointer-events-none");
+        modalContent.classList.remove("scale-100");
+        modalContent.classList.add("scale-90");
+
+        setTimeout(() => {
+          envelope.classList.remove("open");
+          targetLabel.innerText = "♥ Shoot the Heart to Open ♥";
+          dragPos = { ...bowCenter };
+        }, 400);
+      }
+
+      document
+        .getElementById("closeModalBtn")
+        .addEventListener("click", closeModal);
+      document
+        .getElementById("replayBtn")
+        .addEventListener("click", closeModal);
+    </script>
+  </body>
+</html>
